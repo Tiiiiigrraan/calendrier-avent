@@ -108,16 +108,23 @@ export function TileFace({ dayData, stickers, children }) {
   const themeObj = TILE_THEMES.find((t) => t.id === theme) || TILE_THEMES[0];
   const hasIllustration = illustration && illustration !== 'none' && illustration !== 'snowflake';
   const showCornerNumber = hasIllustration || badgeText || hideDefaultArt;
-  const list = stickers ?? dayData.stickers;
+  const list = stickers ?? dayData.stickers ?? [];
+  const backStickers = list.filter((s) => s.layer === 'back');
+  const frontStickers = list.filter((s) => s.layer !== 'back');
 
   return (
     <div
       className={`absolute inset-0 overflow-hidden rounded-2xl ${themeObj.className}`}
       style={{ containerType: 'inline-size' }}
     >
+      {/* Stickers placed BEHIND default illustration / big number */}
+      <div className="pointer-events-none absolute inset-0 z-[1]" style={{ transform: 'translate(var(--px, 0px), var(--py, 0px))' }}>
+        <TileStickers stickers={backStickers} zIndex="z-[1]" />
+      </div>
+
       {!hideDefaultArt && (
         <div
-          className={`pointer-events-none absolute inset-0 flex items-center justify-center px-3 pb-3 ${
+          className={`pointer-events-none absolute inset-0 z-[3] flex items-center justify-center px-3 pb-3 ${
             showCornerNumber ? 'pt-9' : 'pt-3'
           }`}
         >
@@ -152,9 +159,9 @@ export function TileFace({ dayData, stickers, children }) {
         </div>
       )}
 
-      {/* User stickers, with a little parallax when the tile tilts */}
-      <div className="absolute inset-0 z-[5]" style={{ transform: 'translate(var(--px, 0px), var(--py, 0px))' }}>
-        <TileStickers stickers={list} />
+      {/* Stickers placed IN FRONT OF default illustration / big number */}
+      <div className="pointer-events-none absolute inset-0 z-[6]" style={{ transform: 'translate(var(--px, 0px), var(--py, 0px))' }}>
+        <TileStickers stickers={frontStickers} zIndex="z-[6]" />
       </div>
 
       {showCornerNumber && (

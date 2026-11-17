@@ -116,7 +116,9 @@ export function HeaderCountdown({
             <span className="twinkle absolute -left-3 -top-1 text-[#F2D078] text-xs" style={{ animationDuration: '3s' }}>✦</span>
             <span className="twinkle absolute left-[62%] -top-3 text-[#F2D078] text-[10px]" style={{ animationDuration: '3.6s', animationDelay: '1.2s' }}>✦</span>
             <span className="twinkle absolute -right-4 top-6 text-[#F2D078] text-sm" style={{ animationDuration: '4.2s', animationDelay: '2s' }}>✦</span>
-            <p className="font-script text-2xl sm:text-3xl text-[#D4AF37] mb-0.5">En attendant Noël avec toi…</p>
+            <p className="font-script text-2xl sm:text-3xl text-[#D4AF37] mb-0.5">
+              {settings.headerSubtitle ?? 'En attendant Noël avec toi…'}
+            </p>
             <h1 className="font-serif-chic text-3xl sm:text-5xl font-bold tracking-tight text-[#F9F4EA]">
               {settings.calendarTitle || "Calendrier de l'avent"}
             </h1>

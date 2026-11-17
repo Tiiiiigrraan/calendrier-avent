@@ -207,7 +207,7 @@ export default function App() {
 
         {/* Discreet Footer with hidden Creator trigger at the bottom */}
         <footer className="w-full max-w-6xl mx-auto px-6 py-4 border-t border-[#F9F4EA]/10 flex items-center justify-between gap-2 text-[11px] text-[#F9F4EA]/40 relative z-20">
-          <span>Fait avec amour ❤️</span>
+          <span>{calendarData.settings?.footerText ?? 'Fait avec amour ❤️'}</span>
           <button
             type="button"
             onClick={() => {

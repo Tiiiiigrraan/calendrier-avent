@@ -86,7 +86,7 @@ export function StickerEditor({ dayData, onChange, storageBytes, storageBudget }
     try {
       const src = await compressStickerFile(file);
       const id = `stk_${Date.now().toString(36)}`;
-      setStickers([...stickers, { id, src, x: 50, y: 55, width: 60, rotation: 0, flipX: false }]);
+      setStickers([...stickers, { id, src, x: 50, y: 55, width: 60, rotation: 0, flipX: false, layer: 'front' }]);
       setSelectedId(id);
     } catch (err) {
       console.error('Sticker upload error:', err);
@@ -195,8 +195,9 @@ export function StickerEditor({ dayData, onChange, storageBytes, storageBudget }
             style={{ width: preview.width, maxWidth: '100%', aspectRatio: preview.aspect }}
             aria-label="Aperçu de la case, utilise les flèches pour déplacer l'image sélectionnée"
           >
-            <TileFace dayData={dayData} stickers={[]} />
-            <div className="absolute inset-0 overflow-hidden rounded-2xl">
+            <TileFace dayData={dayData} stickers={stickers} />
+            {/* Invisible hit-targets on top so any sticker (front or back) can be dragged */}
+            <div className="absolute inset-0 z-20 overflow-hidden rounded-2xl">
               {stickers.map((s) => (
                 <img
                   key={s.id}
@@ -204,7 +205,7 @@ export function StickerEditor({ dayData, onChange, storageBytes, storageBudget }
                   alt=""
                   draggable={false}
                   onPointerDown={(e) => startGesture(e, s, 'move')}
-                  className="sticker-img absolute max-w-none select-none cursor-move"
+                  className="absolute max-w-none select-none cursor-move opacity-0"
                   style={stickerStyle(s)}
                 />
               ))}
@@ -212,7 +213,7 @@ export function StickerEditor({ dayData, onChange, storageBytes, storageBudget }
             {/* Selection frame + handles (outside overflow so handles stay grabbable) */}
             {selected && (
               <div
-                className="absolute pointer-events-none"
+                className="absolute z-30 pointer-events-none"
                 style={{ ...stickerStyle(selected), transform: `translate(-50%, -50%) rotate(${selected.rotation || 0}deg)` }}
               >
                 <img src={selected.src} alt="" className="invisible w-full" draggable={false} />
@@ -258,6 +259,34 @@ export function StickerEditor({ dayData, onChange, storageBytes, storageBudget }
 
           {selected ? (
             <>
+              <div>
+                <span className="block text-[11px] font-bold text-[#4F6358] mb-1">
+                  Plan par rapport au chiffre / à l’illustration de la case
+                </span>
+                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#FAF6EE] border border-[#132A1F]/10">
+                  {[
+                    { id: 'front', label: 'Premier plan (Devant)' },
+                    { id: 'back', label: 'Arrière-plan (Derrière)' },
+                  ].map((opt) => {
+                    const active = (selected.layer || 'front') === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => updateSticker(selected.id, { layer: opt.id })}
+                        className={`py-1.5 px-2.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          active
+                            ? 'bg-[#132A1F] text-[#F9F4EA] shadow-xs'
+                            : 'text-[#4F6358] hover:text-[#132A1F]'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {[
                 { key: 'x', label: 'Position horizontale', min: -20, max: 120, step: 0.5, unit: '%' },
                 { key: 'y', label: 'Position verticale', min: -20, max: 120, step: 0.5, unit: '%' },
@@ -306,8 +335,8 @@ export function StickerEditor({ dayData, onChange, storageBytes, storageBudget }
                   },
                   ...(stickers.length > 1
                     ? [
-                        { icon: ArrowUp, label: 'Devant', run: () => move(1) },
-                        { icon: ArrowDown, label: 'Derrière', run: () => move(-1) },
+                        { icon: ArrowUp, label: 'Monter calque', run: () => move(1) },
+                        { icon: ArrowDown, label: 'Descendre calque', run: () => move(-1) },
                       ]
                     : []),
                 ].map(({ icon: Icon, label, run }) => (

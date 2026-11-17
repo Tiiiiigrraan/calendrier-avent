@@ -5,6 +5,8 @@ export const DEFAULT_CALENDAR_DATA = {
   settings: {
     recipientName: "Mon Cœur",
     calendarTitle: "Calendrier de l'Avent",
+    headerSubtitle: "En attendant Noël avec toi…",
+    footerText: "Fait avec amour ❤️",
     coverSubtitle: "25 petites attentions, souvenirs et surprises rien que pour toi en attendant Noël ✨",
     coverButtonText: "Ouvrir mes surprises",
     lockedMessage: "Patience mon amour… Cette case ne s'ouvrira que le {day} décembre ! 🎄",

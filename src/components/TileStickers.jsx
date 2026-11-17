@@ -14,10 +14,10 @@ export function stickerStyle(s) {
   };
 }
 
-export function TileStickers({ stickers }) {
+export function TileStickers({ stickers, zIndex = 'z-[6]' }) {
   if (!stickers?.length) return null;
   return (
-    <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+    <div className={`pointer-events-none absolute inset-0 ${zIndex}`} aria-hidden="true">
       {stickers.map((s) => (
         <img
           key={s.id}

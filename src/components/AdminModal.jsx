@@ -853,6 +853,32 @@ export function AdminModal({
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EE] border border-[#132A1F]/15 text-sm"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#4F6358] mb-1">
+                    Sous-titre doré au-dessus du titre
+                  </label>
+                  <input
+                    type="text"
+                    value={draftData.settings.headerSubtitle ?? 'En attendant Noël avec toi…'}
+                    onChange={(e) => updateSettings({ headerSubtitle: e.target.value })}
+                    placeholder="Ex: En attendant Noël avec toi…"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EE] border border-[#132A1F]/15 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#4F6358] mb-1">
+                    Texte de signature tout en bas de page
+                  </label>
+                  <input
+                    type="text"
+                    value={draftData.settings.footerText ?? 'Fait avec amour ❤️'}
+                    onChange={(e) => updateSettings({ footerText: e.target.value })}
+                    placeholder="Ex: Fait avec amour ❤️"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF6EE] border border-[#132A1F]/15 text-sm"
+                  />
+                </div>
               </div>
 
               <div>
